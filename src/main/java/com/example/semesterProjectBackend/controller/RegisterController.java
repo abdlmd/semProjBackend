@@ -17,4 +17,8 @@ public class RegisterController {
         return service.registerUser(users);
 
     }
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody Users user){
+        return service.loginUser(user);
+    }
 }
