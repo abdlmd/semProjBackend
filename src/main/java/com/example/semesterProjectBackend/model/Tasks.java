@@ -1,10 +1,12 @@
 package com.example.semesterProjectBackend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -20,15 +22,20 @@ public class Tasks {
     private int id;
     private String title;
     private String description;
-    private Date createdAt;
+
+    private String createdAt;
     private String status;
+    private String category;
     @ManyToOne
     @JoinColumn(name="requester_id")
+    @JsonBackReference("posted-tasks")
     private Users posters;
 
     @ManyToOne
     @JoinColumn(name = "volunteer_id")
+    @JsonBackReference("volunteered-tasks")
     private Users volunteer;
+
 
 
     private String imageName;

@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.config.Task;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
 
 @RestController
@@ -20,25 +22,37 @@ public class TaskController {
     private TaskService service;
 
     @GetMapping("/tasks")
-    public ResponseEntity<?> getAllTasks(){
+    public ResponseEntity<?> getAllTasks(Principal principal){
+        System.out.println("Authenticated user: " + principal.getName());
         return service.getAllTasks();
     }
     @PostMapping("/tasks")
-    public ResponseEntity<?> createTask(@RequestBody Tasks task, Principal principal){
-        return service.createTask(task,principal);
+    public ResponseEntity<?> createTask(@ModelAttribute Tasks task, @RequestPart(value = "imageFile") MultipartFile imageFile, Principal principal) throws IOException {
+        return service.createTask(task,imageFile,principal);
 
     }
-    @PutMapping("/tasks")
-    public ResponseEntity<?> assignVolunteer(@RequestBody Tasks tasks, Principal principal){
-        return service.assignVolunteer(tasks,principal);
+    @GetMapping("/tasks/{id}")
+    public ResponseEntity<?> getTask(@PathVariable int id){
+        return service.getTask(id);
     }
-    @PutMapping("/taskUpdate")
-    public ResponseEntity<?> updateTask(@RequestBody Tasks tasks){
-        return service.updateTask(tasks);
+
+    @PutMapping("/tasks/{id}")
+    public ResponseEntity<?> assignVolunteer(@PathVariable int id, Principal principal){
+        return service.assignVolunteer(id,principal);
+    }
+    @PutMapping("/taskUpdate/{id}")
+    public ResponseEntity<?> updateTask(@PathVariable int id){
+        return service.updateTask(id);
     }
     @GetMapping("/myTasks")
     public ResponseEntity<?> getMyTasks(Principal principal){
         return service.getMyTasks(principal);
+    }
+    @GetMapping("/task/{id}/image")
+    public ResponseEntity<?> getImage(@PathVariable int id){
+        return service.getImage(id);
+
+
     }
     @GetMapping("/volunteeredTasks")
     public ResponseEntity<?> getVolunteeredTasks(Principal principal)

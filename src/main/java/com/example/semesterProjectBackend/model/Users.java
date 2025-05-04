@@ -1,5 +1,6 @@
 package com.example.semesterProjectBackend.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,9 +24,11 @@ public class Users {
     private String password;
 
     @OneToMany(mappedBy = "posters")
+    @JsonManagedReference("posted-tasks")
     List<Tasks> postedTasks;
 
     @OneToMany(mappedBy = "volunteer")
+    @JsonManagedReference("volunteered-tasks")
     List<Tasks> workedTasks;
 
 }
